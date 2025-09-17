@@ -16,7 +16,12 @@ const db = { users: [{ id: 1, email: 'demo@example.com', password: 'pass123' }] 
 
 // Basic API (will be expanded by feature/api-endpoints)
 app.get('/api/users', (req, res) => res.json(db.users));
-
+const { requireFields } = require('./validators');
+app.post('/api/echo', (req, res) => {
+try { requireFields(req.body, 'message'); }
+catch(err){ return res.status(400).json({ ok:false, error: err.message }); }
+res.json({ ok:true, echo: req.body.message });
+});
 
 // Basic auth handler (will be replaced by feature/user-authentication)
 app.post('/auth/login', (req, res) => {
@@ -29,3 +34,7 @@ return res.status(401).json({ ok: false, error: 'Invalid credentials' });
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+
+// Additional API routes (feature/api-endpoints)
+app.get('/api/healthz', (req, res) => res.json({ status: 'ok', ts: Date.now() }));
+app.get('/api/version', (req, res) => res.json({ version: '1.0.0' }));
