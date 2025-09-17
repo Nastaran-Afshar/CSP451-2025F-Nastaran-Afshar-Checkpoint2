@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Week 2 Project</title>
+<title>Auth Focus</title>
 <style>body{font-family:system-ui, sans-serif;max-width:820px;margin:2rem auto;padding:0 1rem}</style>
 </head>
 <body>
@@ -31,6 +31,19 @@ body: JSON.stringify({ email: form.get('email'), password: form.get('password') 
 });
 const data = await res.json();
 document.getElementById('out').textContent = JSON.stringify(data, null, 2);
+});
+</script>
+<script type="module">
+import { validateEmail, login } from './auth.js';
+const out = document.getElementById('out');
+document.getElementById('loginForm').addEventListener('submit', async (e)=>{
+e.preventDefault();
+const form = new FormData(e.target);
+const email = form.get('email');
+const password = form.get('password');
+if(!validateEmail(email)) { out.textContent = 'Invalid email format'; return; }
+try { out.textContent = JSON.stringify(await login(email, password), null, 2); }
+catch(err){ out.textContent = err.message; }
 });
 </script>
 </body>
