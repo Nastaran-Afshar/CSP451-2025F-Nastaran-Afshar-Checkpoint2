@@ -23,6 +23,7 @@ catch(err){ return res.status(400).json({ ok:false, error: err.message }); }
 res.json({ ok:true, echo: req.body.message });
 });
 
+// Basic auth handler (will be replaced by feature/user-authentication)
 const { Users, seedUsers } = require('./db');
 const users = new Users(seedUsers);
 app.get('/api/users', (req, res) => res.json(users.all()));
