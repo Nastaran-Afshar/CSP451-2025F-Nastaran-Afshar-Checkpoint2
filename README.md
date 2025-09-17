@@ -1,4 +1,6 @@
-﻿
+
+## DB
+Uses src/db.js adapter with in‑memory seed.
 ## Auth
 POST /auth/login with {email,password}
 

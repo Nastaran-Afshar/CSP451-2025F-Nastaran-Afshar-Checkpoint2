@@ -24,10 +24,13 @@ res.json({ ok:true, echo: req.body.message });
 });
 
 // Basic auth handler (will be replaced by feature/user-authentication)
+const { Users, seedUsers } = require('./db');
+const users = new Users(seedUsers);
+app.get('/api/users', (req, res) => res.json(users.all()));
 app.post('/auth/login', (req, res) => {
 const { email, password } = req.body;
-const user = db.users.find(u => u.email === email && u.password === password);
-if (user) return res.json({ ok: true, user: { id: user.id, email: user.email } });
+const u = users.byEmail(email);
+if (u && u.password === password) return res.json({ ok: true, user: { id: u.id, email: u.email } });
 return res.status(401).json({ ok: false, error: 'Invalid credentials' });
 });
 
